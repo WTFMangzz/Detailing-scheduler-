@@ -33,7 +33,7 @@ function App() {
   const [tabValue, setTabValue] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     if (newValue === 1 && !isAuthenticated) {
       const password = prompt('Please enter the admin password:');
       if (password === 'admin123') {
