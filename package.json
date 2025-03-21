@@ -1,5 +1,5 @@
 {
-  "name": "car-wash-scheduler",
+  "name": "detailing-scheduler",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -22,10 +22,8 @@
     "@mui/material": "^5.15.10",
     "@mui/x-date-pickers": "^7.28.0",
     "@types/node": "^22.13.11",
-    "@types/twilio": "^3.19.2",
     "date-fns": "^3.6.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "twilio": "^5.5.1"
+    "react-dom": "^18.2.0"
   }
 }
