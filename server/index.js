@@ -7,7 +7,10 @@ const { google } = require('googleapis');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ['https://ejs-auto-detailing.vercel.app', 'http://localhost:5173'],
+  credentials: true
+}));
 app.use(express.json());
 
 const twilioClient = twilio(

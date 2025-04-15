@@ -53,7 +53,7 @@ function isWithinBusinessHours(time: string, isWeekend: boolean): boolean {
 }
 
 // Replace all instances of 'http://localhost:3000' with your Vercel backend URL
-const API_URL = 'https://your-backend-url.vercel.app';
+const API_URL = 'https://ejs-auto-detailing.vercel.app';
 
 function App() {
   const [tabValue, setTabValue] = useState(0);
@@ -70,6 +70,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [timeError, setTimeError] = useState<string>('');
+  const [availableSlots, setAvailableSlots] = useState([]);
 
   const serviceTypes = [
     { value: 'full', label: 'Interior & Exterior Detail', duration: 3 },
@@ -115,7 +116,7 @@ function App() {
       const response = await fetch(`${API_URL}/api/calendar/available-slots?date=${date}`);
       const data = await response.json();
       if (response.ok) {
-        // setAvailableSlots(data.availableSlots);
+        setAvailableSlots(data.availableSlots);
       } else {
         setTimeError(data.error || 'Failed to fetch available slots');
       }
@@ -215,7 +216,7 @@ function App() {
         setCustomerEmail('');
         setSelectedDate('');
         setServiceType('');
-        // setAvailableSlots([]);
+        setAvailableSlots([]);
       } else {
         setAppointmentStatus({
           success: false,
