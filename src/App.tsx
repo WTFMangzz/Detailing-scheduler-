@@ -184,7 +184,18 @@ function App() {
     const duration = selectedService ? selectedService.duration : 2;
 
     try {
-      const response = await fetch(`${API_URL}/api/calendar/events`, {
+      // Log the request data for debugging
+      console.log('Sending appointment request:', {
+        name: customerName,
+        phone: customerPhone,
+        email: customerEmail,
+        date: selectedDate,
+        startTime: selectedTime,
+        endTime: new Date(appointmentDate.getTime() + duration * 60 * 60 * 1000).toISOString().split('T')[1],
+        service: serviceType,
+      });
+
+      const response = await fetch('https://ejs-auto-detailing.vercel.app/api/calendar/events', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -201,6 +212,7 @@ function App() {
       });
 
       const data = await response.json();
+      console.log('Server response:', data); // Log the server response
 
       if (response.ok) {
         setAppointmentStatus({
@@ -212,17 +224,20 @@ function App() {
         setCustomerPhone('');
         setCustomerEmail('');
         setSelectedDate('');
+        setSelectedTime('');
         setServiceType('');
+        setAppointmentDate(null);
       } else {
         setAppointmentStatus({
           success: false,
-          message: data.error || 'Failed to schedule appointment'
+          message: data.error || 'Failed to schedule appointment. Please try again.'
         });
       }
     } catch (error) {
+      console.error('Appointment scheduling error:', error); // Log any errors
       setAppointmentStatus({
         success: false,
-        message: 'Failed to schedule appointment'
+        message: 'Failed to connect to the server. Please try again later.'
       });
     }
   };
