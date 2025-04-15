@@ -43,24 +43,6 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-// Add this function to generate default time slots based on business hours
-const generateDefaultTimeSlots = (date: string) => {
-  const slots = [];
-  const selectedDate = new Date(date);
-  const isWeekend = selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
-  
-  const startHour = isWeekend ? 9 : 15; // 9 AM for weekends, 3 PM for weekdays
-  const endHour = 19; // 7 PM for all days
-  
-  for (let hour = startHour; hour < endHour; hour++) {
-    const startTime = `${hour.toString().padStart(2, '0')}:00`;
-    const endTime = `${(hour + 1).toString().padStart(2, '0')}:00`;
-    slots.push({ startTime, endTime });
-  }
-  
-  return slots;
-};
-
 // Add this function at the top of your App component
 function isWithinBusinessHours(time: string, isWeekend: boolean): boolean {
   const hour = parseInt(time.split(':')[0]);
