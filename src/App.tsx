@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Container, Tab, Tabs, Typography, TextField, Button, Alert, MenuItem, Select, InputLabel, FormControl, Dialog, DialogTitle, DialogContent, DialogActions, AppBar, Toolbar, IconButton } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 // Create a theme with the dark background color
@@ -88,10 +85,7 @@ function App() {
   const [customerEmail, setCustomerEmail] = useState('');
   const [serviceType, setServiceType] = useState('');
   const [appointmentStatus, setAppointmentStatus] = useState<{ success: boolean; message: string } | null>(null);
-  const [availableSlots, setAvailableSlots] = useState<Array<{ startTime: string; endTime: string }>>([]);
   const [selectedDate, setSelectedDate] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const [defaultTimeSlots, setDefaultTimeSlots] = useState<Array<{ startTime: string; endTime: string }>>([]);
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [timeError, setTimeError] = useState<string>('');
 
@@ -107,7 +101,7 @@ function App() {
       setAdminLoginOpen(false);
       setAdminCredentials({ username: '', password: '' });
     } else {
-      setError('Invalid admin credentials');
+      setTimeError('Invalid admin credentials');
     }
   };
 
@@ -139,12 +133,12 @@ function App() {
       const response = await fetch(`${API_URL}/api/calendar/available-slots?date=${date}`);
       const data = await response.json();
       if (response.ok) {
-        setAvailableSlots(data.availableSlots);
+        // setAvailableSlots(data.availableSlots);
       } else {
-        setError(data.error || 'Failed to fetch available slots');
+        setTimeError(data.error || 'Failed to fetch available slots');
       }
     } catch (error) {
-      setError('Failed to fetch available slots');
+      setTimeError('Failed to fetch available slots');
     }
   };
 
@@ -158,17 +152,17 @@ function App() {
 
   // Update handleDateChange
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedDate = event.target.value;
+    const date = event.target.value;
     const minDate = getMinDate();
     
-    if (selectedDate < minDate) {
-      setError('Please select a date at least 24 hours in advance');
+    if (date < minDate) {
+      setTimeError('Please select a date at least 24 hours in advance');
       return;
     }
     
-    setSelectedDate(selectedDate);
-    setError('');
-    fetchAvailableSlots(selectedDate);
+    setSelectedDate(date);
+    setTimeError('');
+    fetchAvailableSlots(date);
   };
 
   // Update handleTimeChange
@@ -239,7 +233,7 @@ function App() {
         setCustomerEmail('');
         setSelectedDate('');
         setServiceType('');
-        setAvailableSlots([]);
+        // setAvailableSlots([]);
       } else {
         setAppointmentStatus({
           success: false,
