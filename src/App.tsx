@@ -171,11 +171,16 @@ function App() {
     fetchAvailableSlots(selectedDate);
   };
 
-  // Add this function to handle time selection
+  // Update handleTimeChange
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const time = event.target.value;
-    const selectedDate = new Date(date);
-    const isWeekend = selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
+    if (!selectedDate) {
+      setTimeError('Please select a date first');
+      return;
+    }
+    
+    const selected = new Date(selectedDate);
+    const isWeekend = selected.getDay() === 0 || selected.getDay() === 6;
     
     if (!isWithinBusinessHours(time, isWeekend)) {
       setTimeError(isWeekend 
@@ -193,7 +198,13 @@ function App() {
   // Update handleSubmit
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError('');
+    if (!appointmentDate) {
+      setAppointmentStatus({
+        success: false,
+        message: 'Please select a date and time'
+      });
+      return;
+    }
 
     const selectedService = serviceTypes.find(service => service.value === serviceType);
     const duration = selectedService ? selectedService.duration : 2;
@@ -209,8 +220,8 @@ function App() {
           phone: customerPhone,
           email: customerEmail,
           date: selectedDate,
-          startTime: appointmentDate?.toISOString().split('T')[1],
-          endTime: new Date(appointmentDate?.getTime() + duration * 60 * 60 * 1000).toISOString().split('T')[1],
+          startTime: selectedTime,
+          endTime: new Date(appointmentDate.getTime() + duration * 60 * 60 * 1000).toISOString().split('T')[1],
           service: serviceType,
         }),
       });
