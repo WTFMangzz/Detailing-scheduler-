@@ -70,7 +70,6 @@ function App() {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [timeError, setTimeError] = useState<string>('');
-  const [availableSlots, setAvailableSlots] = useState([]);
 
   const serviceTypes = [
     { value: 'full', label: 'Interior & Exterior Detail', duration: 3 },
@@ -111,17 +110,15 @@ function App() {
   };
 
   // Function to fetch available time slots
-  const fetchAvailableSlots = async (date: string) => {
+  const checkTimeAvailability = async (date: string) => {
     try {
       const response = await fetch(`${API_URL}/api/calendar/available-slots?date=${date}`);
       const data = await response.json();
-      if (response.ok) {
-        setAvailableSlots(data.availableSlots);
-      } else {
-        setTimeError(data.error || 'Failed to fetch available slots');
+      if (!response.ok) {
+        setTimeError(data.error || 'Failed to check time availability');
       }
     } catch (error) {
-      setTimeError('Failed to fetch available slots');
+      setTimeError('Failed to check time availability');
     }
   };
 
@@ -145,7 +142,7 @@ function App() {
     
     setSelectedDate(date);
     setTimeError('');
-    fetchAvailableSlots(date);
+    checkTimeAvailability(date);
   };
 
   // Update handleTimeChange
@@ -216,7 +213,6 @@ function App() {
         setCustomerEmail('');
         setSelectedDate('');
         setServiceType('');
-        setAvailableSlots([]);
       } else {
         setAppointmentStatus({
           success: false,
